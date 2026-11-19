@@ -1,0 +1,141 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+  <div class="row g-4">
+    <!-- Left Column: User Summary Card -->
+    <div class="col-lg-4 col-12">
+      <div class="card p-4 rounded-4 border shadow-sm text-center mb-4">
+        <!-- Avatar -->
+        <div class="position-relative d-inline-block mx-auto mb-3">
+          <% if(user.avatar && user.avatar.url) { %>
+            <img src="<%= user.avatar.url %>" alt="<%= user.username %>" class="rounded-circle shadow-sm" style="width: 120px; height: 120px; object-fit: cover;">
+          <% } else { %>
+            <div class="user-avatar-placeholder rounded-circle mx-auto" style="width: 120px; height: 120px; font-size: 3rem;">
+              <i class="fa-solid fa-user"></i>
+            </div>
+          <% } %>
+          <span class="badge bg-danger position-absolute bottom-0 end-0 rounded-pill px-2 py-1 text-capitalize">
+            <%= user.role || 'Traveler' %>
+          </span>
+        </div>
+
+        <h4 class="fw-bold mb-1 text-dark"><%= user.name || user.username %></h4>
+        <p class="text-muted small mb-2">@<%= user.username %></p>
+        <p class="text-secondary small mb-3 fst-italic">"<%= user.bio || 'Exploring the world one stay at a time.' %>"</p>
+
+        <div class="border-top pt-3 text-start small text-muted d-flex flex-column gap-2">
+          <div><i class="fa-regular fa-envelope me-2"></i><%= user.email %></div>
+          <% if(user.phone) { %>
+            <div><i class="fa-solid fa-phone me-2"></i><%= user.phone %></div>
+          <% } %>
+          <div><i class="fa-regular fa-calendar me-2"></i>Joined <%= new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %></div>
+        </div>
+      </div>
+
+      <!-- Quick Navigation Card -->
+      <div class="card p-3 rounded-4 border shadow-sm">
+        <h6 class="fw-bold text-dark px-2 pt-1 mb-2">Quick Shortcuts</h6>
+        <div class="list-group list-group-flush small">
+          <a href="/bookings" class="list-group-item list-group-item-action border-0 rounded-3 d-flex justify-content-between align-items-center py-2">
+            <span><i class="fa-regular fa-calendar-check me-2 text-muted"></i>My Bookings</span>
+            <span class="badge bg-light text-dark border"><%= stats.bookingCount %></span>
+          </a>
+          <a href="/listings/my-listings" class="list-group-item list-group-item-action border-0 rounded-3 d-flex justify-content-between align-items-center py-2">
+            <span><i class="fa-solid fa-house-chimney me-2 text-muted"></i>My Hosted Listings</span>
+            <span class="badge bg-light text-dark border"><%= stats.listingCount %></span>
+          </a>
+          <a href="/wishlist" class="list-group-item list-group-item-action border-0 rounded-3 d-flex justify-content-between align-items-center py-2">
+            <span><i class="fa-regular fa-heart me-2 text-muted"></i>My Wishlist</span>
+            <span class="badge bg-light text-dark border"><%= user.wishlist ? user.wishlist.length : 0 %></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Stats & Edit Profile -->
+    <div class="col-lg-8 col-12">
+      <!-- Activity Stats Row -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-4 col-12">
+          <div class="card p-3 rounded-4 border shadow-xs bg-light text-center">
+            <span class="text-muted small fw-semibold text-uppercase">Properties Hosted</span>
+            <span class="fs-2 fw-bold text-dark"><%= stats.listingCount %></span>
+          </div>
+        </div>
+        <div class="col-md-4 col-12">
+          <div class="card p-3 rounded-4 border shadow-xs bg-light text-center">
+            <span class="text-muted small fw-semibold text-uppercase">Trips Taken</span>
+            <span class="fs-2 fw-bold text-dark"><%= stats.bookingCount %></span>
+          </div>
+        </div>
+        <div class="col-md-4 col-12">
+          <div class="card p-3 rounded-4 border shadow-xs bg-light text-center">
+            <span class="text-muted small fw-semibold text-uppercase">Reviews Left</span>
+            <span class="fs-2 fw-bold text-dark"><%= stats.reviewCount %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Edit Profile Form -->
+      <div class="card p-4 p-md-5 rounded-4 border shadow-sm bg-white">
+        <h4 class="fw-bold text-dark mb-1">Edit Account Profile</h4>
+        <p class="text-muted small mb-4">Keep your contact and bio information up to date.</p>
+
+        <form action="/profile?_method=PUT" method="POST">
+          <div class="row g-3 mb-3">
+            <div class="col-md-6 col-12">
+              <label for="name" class="form-label small fw-bold text-muted">Display Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                value="<%= user.name || '' %>" 
+                class="form-control rounded-3" 
+                placeholder="Full name"
+              >
+            </div>
+            <div class="col-md-6 col-12">
+              <label for="phone" class="form-label small fw-bold text-muted">Phone Number</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                name="phone" 
+                value="<%= user.phone || '' %>" 
+                class="form-control rounded-3" 
+                placeholder="+1 (555) 000-0000"
+              >
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="avatarUrl" class="form-label small fw-bold text-muted">Avatar Image URL</label>
+            <input 
+              type="url" 
+              id="avatarUrl" 
+              name="avatarUrl" 
+              value="<%= user.avatar ? user.avatar.url : '' %>" 
+              class="form-control rounded-3" 
+              placeholder="https://images.unsplash.com/..."
+            >
+          </div>
+
+          <div class="mb-4">
+            <label for="bio" class="form-label small fw-bold text-muted">About You (Bio)</label>
+            <textarea 
+              id="bio" 
+              name="bio" 
+              rows="3" 
+              class="form-control rounded-3" 
+              placeholder="Tell other hosts and travelers about yourself..."
+            ><%= user.bio || '' %></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-dark rounded-pill px-4 fw-semibold">
+            Save Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

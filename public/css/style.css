@@ -1,0 +1,442 @@
+/* ==========================================================================
+   Wanderlust - Airbnb-Style Modern UI Stylesheet
+   ========================================================================== */
+
+:root {
+  --primary-color: #ff385c;
+  --primary-hover: #e00b41;
+  --text-dark: #222222;
+  --text-muted: #717171;
+  --border-light: #ebebeb;
+  --card-radius: 1rem;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  color: var(--text-dark);
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.main-content {
+  flex: 1;
+}
+
+.page-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 0 1rem;
+  }
+}
+
+/* ==========================================================================
+   Navbar Styling
+   ========================================================================== */
+.main-navbar {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  z-index: 1020;
+}
+
+.brand-icon {
+  color: var(--primary-color);
+  font-size: 2.1rem;
+}
+
+.brand-text {
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--primary-color);
+  letter-spacing: -0.5px;
+}
+
+.navbar-search-wrapper {
+  max-width: 420px;
+  width: 100%;
+}
+
+.search-form {
+  position: relative;
+  border: 1px solid #dddddd;
+  border-radius: 40px;
+  padding: 4px 6px 4px 18px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  background-color: #ffffff;
+}
+
+.search-form:hover,
+.search-form:focus-within {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.search-input {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-dark);
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.search-btn {
+  background-color: var(--primary-color) !important;
+  color: #ffffff !important;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 0.85rem;
+  transition: transform 0.15s ease;
+}
+
+.search-btn:hover {
+  background-color: var(--primary-hover) !important;
+  transform: scale(1.05);
+}
+
+.nav-host-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-host-link:hover {
+  background-color: #f7f7f7;
+  color: var(--text-dark);
+}
+
+.user-menu-btn {
+  border: 1px solid #dddddd;
+  background-color: #ffffff;
+  padding: 5px 8px 5px 12px;
+  transition: box-shadow 0.2s ease;
+}
+
+.user-menu-btn:hover,
+.user-menu-btn:focus {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.14);
+}
+
+.user-avatar-sm {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}
+
+.user-avatar-placeholder {
+  width: 30px;
+  height: 30px;
+  background-color: #717171;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}
+
+.user-dropdown-menu {
+  width: 240px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.user-dropdown-menu .dropdown-item {
+  font-size: 0.875rem;
+  padding: 8px 16px;
+  font-weight: 500;
+}
+
+.user-dropdown-menu .dropdown-item:hover {
+  background-color: #f7f7f7;
+}
+
+/* ==========================================================================
+   Category Bar Styling
+   ========================================================================== */
+.category-filter-section {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.category-bar {
+  display: flex;
+  gap: 1.75rem;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE */
+}
+
+.category-bar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.category-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid transparent;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.category-pill .category-icon {
+  font-size: 1.35rem;
+}
+
+.category-pill:hover {
+  opacity: 1;
+  color: var(--text-dark);
+  border-bottom-color: #dddddd;
+}
+
+.category-pill.active {
+  opacity: 1;
+  color: var(--text-dark);
+  border-bottom-color: var(--text-dark);
+}
+
+/* Tax Toggle & Filters */
+.btn-filter {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-color: #dddddd;
+  color: var(--text-dark);
+}
+
+.btn-filter:hover {
+  background-color: #f7f7f7;
+  border-color: var(--text-dark);
+  color: var(--text-dark);
+}
+
+.tax-toggle-box {
+  background-color: #ffffff;
+  border-color: #dddddd !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--text-dark);
+  border-color: var(--text-dark);
+}
+
+/* ==========================================================================
+   Property Cards Styling
+   ========================================================================== */
+.property-card {
+  border: none !important;
+  background: transparent;
+  transition: transform 0.2s ease;
+}
+
+.property-img-wrapper {
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  position: relative;
+  background-color: #f0f0f0;
+}
+
+.property-img {
+  width: 100%;
+  aspect-ratio: 20 / 19;
+  object-fit: cover !important;
+  border-radius: var(--card-radius) !important;
+  transition: transform 0.35s ease;
+}
+
+.property-card:hover .property-img {
+  transform: scale(1.03);
+}
+
+.property-category-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Wishlist Heart Button */
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.15s ease, color 0.15s ease;
+  z-index: 5;
+  padding: 4px;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.15);
+}
+
+.wishlist-btn.active i,
+.wishlist-btn i.fa-solid {
+  color: var(--primary-color) !important;
+}
+
+/* ==========================================================================
+   Listing Show Page Styling
+   ========================================================================== */
+.listing-show-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.gallery-primary-img {
+  border-radius: 1rem;
+}
+
+.gallery-sub-img {
+  border-radius: 1rem;
+}
+
+.booking-widget-card {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12) !important;
+  border-color: #dddddd !important;
+  background-color: #ffffff;
+}
+
+.btn-reserve {
+  background-color: var(--primary-color) !important;
+  color: #ffffff !important;
+  border: none !important;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-reserve:hover {
+  background-color: var(--primary-hover) !important;
+}
+
+.btn-reserve:active {
+  transform: scale(0.98);
+}
+
+/* Star Rating System */
+.rating-stars {
+  font-size: 1.5rem;
+}
+
+.rating-stars input {
+  display: none;
+}
+
+.rating-stars label {
+  color: #dcdcdc;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  padding: 0 3px;
+}
+
+.rating-stars input:checked ~ label,
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+  color: #ffb400;
+}
+
+/* Map Pin */
+.custom-map-marker .marker-pin {
+  width: 36px;
+  height: 36px;
+  background-color: var(--primary-color);
+  color: #ffffff;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.custom-map-marker .marker-pin i {
+  transform: rotate(45deg);
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Footer Styling
+   ========================================================================== */
+.app-footer {
+  background-color: #f7f7f7 !important;
+  margin-top: auto;
+}
+
+.footer-link {
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: text-decoration 0.2s ease;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  color: var(--text-dark);
+}
+
+.footer-social-icon {
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  transition: opacity 0.2s ease;
+}
+
+.footer-social-icon:hover {
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   Alerts & Utilities
+   ========================================================================== */
+.custom-alert {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-xs {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}

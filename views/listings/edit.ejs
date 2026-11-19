@@ -1,0 +1,190 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-12">
+      <!-- Back Link & Header -->
+      <div class="mb-4">
+        <a href="/listings/<%= listing._id %>" class="text-muted text-decoration-none small d-inline-flex align-items-center gap-1 mb-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Listing Details
+        </a>
+        <h2 class="fw-bold text-dark mb-1">Edit your Listing</h2>
+        <p class="text-muted">Update pricing, description, photos, or amenities for your property.</p>
+      </div>
+
+      <div class="card p-4 p-md-5 rounded-4 border shadow-sm bg-white">
+        <form 
+          method="POST" 
+          action="/listings/<%= listing._id %>?_method=PUT" 
+          enctype="multipart/form-data" 
+          novalidate 
+          class="needs-validation"
+        >
+          <!-- Title -->
+          <div class="mb-4">
+            <label for="title" class="form-label fw-bold">Title</label>
+            <input 
+              id="title" 
+              name="listing[title]" 
+              value="<%= listing.title %>" 
+              type="text" 
+              class="form-control form-control-lg rounded-3" 
+              required
+            >
+            <div class="invalid-feedback">Please enter a title.</div>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-4">
+            <label class="form-label fw-bold">Property Category</label>
+            <select name="listing[category]" class="form-select form-select-lg rounded-3" required>
+              <% const categories = [
+                "trending", "beachfront", "iconic-cities", "mountains", 
+                "castles", "pools", "camping", "farms", "arctic", 
+                "rooms", "domes", "boats", "luxury"
+              ]; %>
+              <% for(let cat of categories) { %>
+                <option value="<%= cat %>" <%= (listing.category === cat) ? 'selected' : '' %>>
+                  <%= cat.charAt(0).toUpperCase() + cat.slice(1).replace('-', ' ') %>
+                </option>
+              <% } %>
+            </select>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <label for="description" class="form-label fw-bold">Description</label>
+            <textarea 
+              id="description" 
+              name="listing[description]" 
+              rows="5" 
+              class="form-control rounded-3" 
+              required
+            ><%= listing.description %></textarea>
+            <div class="invalid-feedback">Please enter a description.</div>
+          </div>
+
+          <!-- Current Photos Preview & Upload New -->
+          <div class="mb-4 p-3 bg-light rounded-3 border">
+            <label class="form-label fw-bold mb-1">Property Photos</label>
+            
+            <% if(originalImageUrl) { %>
+              <div class="mb-3">
+                <span class="small text-muted d-block mb-1">Current Preview:</span>
+                <img src="<%= originalImageUrl %>" alt="Current listing photo" class="rounded-3 shadow-xs border" style="max-height: 180px; object-fit: cover;">
+              </div>
+            <% } %>
+
+            <div class="mb-3">
+              <label for="images" class="form-label small fw-semibold text-secondary">Upload Additional Photos</label>
+              <input 
+                type="file" 
+                id="images" 
+                name="listing[images]" 
+                class="form-control rounded-3" 
+                multiple 
+                accept="image/*"
+              >
+            </div>
+
+            <div>
+              <label for="imageLink" class="form-label small fw-semibold text-secondary">Or Update Image URL</label>
+              <input 
+                type="url" 
+                id="imageLink" 
+                name="listing[image]" 
+                value="<%= listing.displayImage %>" 
+                class="form-control rounded-3"
+              >
+            </div>
+          </div>
+
+          <!-- Price & Country -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6 col-12">
+              <label for="price" class="form-label fw-bold">Price per night (&#8377; INR)</label>
+              <div class="input-group">
+                <span class="input-group-text rounded-start-3">&#8377;</span>
+                <input 
+                  type="number" 
+                  id="price" 
+                  name="listing[price]" 
+                  value="<%= listing.price %>" 
+                  min="0" 
+                  class="form-control rounded-end-3" 
+                  required
+                >
+                <div class="invalid-feedback">Please enter a valid price.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-12">
+              <label for="country" class="form-label fw-bold">Country</label>
+              <input 
+                type="text" 
+                id="country" 
+                name="listing[country]" 
+                value="<%= listing.country %>" 
+                class="form-control rounded-3" 
+                required
+              >
+              <div class="invalid-feedback">Please enter a valid country name.</div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="mb-4">
+            <label for="location" class="form-label fw-bold">Location (City, State)</label>
+            <input 
+              type="text" 
+              id="location" 
+              name="listing[location]" 
+              value="<%= listing.location %>" 
+              class="form-control rounded-3" 
+              required
+            >
+            <div class="invalid-feedback">Please enter a valid location.</div>
+          </div>
+
+          <!-- Amenities Selection -->
+          <div class="mb-4">
+            <label class="form-label fw-bold mb-2">Amenities</label>
+            <div class="row row-cols-md-3 row-cols-sm-2 row-cols-1 g-2">
+              <% const availableAmenities = [
+                "Wifi", "Air conditioning", "Kitchen", "Free parking", 
+                "Dedicated workspace", "Pool", "TV", "Pet friendly", 
+                "Washing machine", "Balcony", "BBQ grill", "Smoke alarm"
+              ]; %>
+              <% for(let amenity of availableAmenities) { %>
+                <% const isChecked = listing.amenities && listing.amenities.includes(amenity); %>
+                <div class="col">
+                  <div class="form-check p-2 border rounded-3 bg-light-subtle">
+                    <input 
+                      class="form-check-input ms-0 me-2" 
+                      type="checkbox" 
+                      name="listing[amenities]" 
+                      value="<%= amenity %>" 
+                      id="edit_amenity_<%= amenity.replace(/\s+/g, '_') %>"
+                      <%= isChecked ? 'checked' : '' %>
+                    >
+                    <label class="form-check-label small fw-medium" for="edit_amenity_<%= amenity.replace(/\s+/g, '_') %>">
+                      <%= amenity %>
+                    </label>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+            <button type="submit" class="btn btn-dark rounded-pill px-5 fw-bold">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

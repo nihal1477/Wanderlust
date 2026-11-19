@@ -1,0 +1,187 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-12">
+      <!-- Header -->
+      <div class="mb-4">
+        <a href="/listings" class="text-muted text-decoration-none small d-inline-flex align-items-center gap-1 mb-2">
+          <i class="fa-solid fa-arrow-left"></i> Back to Explore
+        </a>
+        <h2 class="fw-bold text-dark mb-1">Host your home on Wanderlust</h2>
+        <p class="text-muted">Fill out the details below to create a professional property listing and start hosting guests.</p>
+      </div>
+
+      <div class="card p-4 p-md-5 rounded-4 border shadow-sm bg-white">
+        <form 
+          method="POST" 
+          action="/listings" 
+          enctype="multipart/form-data" 
+          novalidate 
+          class="needs-validation"
+        >
+          <!-- Property Title -->
+          <div class="mb-4">
+            <label for="title" class="form-label fw-bold">Listing Title</label>
+            <input 
+              id="title" 
+              name="listing[title]" 
+              placeholder="e.g. Modern Sunset Villa with Infinity Pool" 
+              type="text" 
+              class="form-control form-control-lg rounded-3" 
+              required
+            >
+            <div class="form-text">Catchy titles attract more bookings. Mention key features like views or location.</div>
+            <div class="invalid-feedback">Please provide a listing title.</div>
+          </div>
+
+          <!-- Category Selection -->
+          <div class="mb-4">
+            <label class="form-label fw-bold">Property Category</label>
+            <select name="listing[category]" class="form-select form-select-lg rounded-3" required>
+              <option value="trending" selected>Trending</option>
+              <option value="beachfront">Beachfront</option>
+              <option value="iconic-cities">Iconic Cities</option>
+              <option value="mountains">Mountains</option>
+              <option value="castles">Castles</option>
+              <option value="pools">Amazing Pools</option>
+              <option value="camping">Camping</option>
+              <option value="farms">Farms</option>
+              <option value="arctic">Arctic</option>
+              <option value="rooms">Rooms</option>
+              <option value="domes">Domes</option>
+              <option value="boats">Boats</option>
+              <option value="luxury">Luxury</option>
+            </select>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <label for="description" class="form-label fw-bold">Description</label>
+            <textarea 
+              id="description" 
+              name="listing[description]" 
+              rows="4" 
+              placeholder="Describe your space, amenities, ambiance, and neighborhood..." 
+              class="form-control rounded-3" 
+              required
+            ></textarea>
+            <div class="invalid-feedback">Please enter a description for your listing.</div>
+          </div>
+
+          <!-- Photos Section: Multi-File Upload & URL Fallback -->
+          <div class="mb-4 p-3 bg-light rounded-3 border">
+            <label class="form-label fw-bold mb-1">Property Photos</label>
+            <p class="text-muted small mb-3">Upload high-resolution images or provide a direct image link.</p>
+            
+            <div class="mb-3">
+              <label for="images" class="form-label small fw-semibold text-secondary">Upload Image Files (Up to 5 photos)</label>
+              <input 
+                type="file" 
+                id="images" 
+                name="listing[images]" 
+                class="form-control rounded-3" 
+                multiple 
+                accept="image/*"
+              >
+            </div>
+
+            <div>
+              <label for="imageLink" class="form-label small fw-semibold text-secondary">Or Paste Image URL (Fallback)</label>
+              <input 
+                type="url" 
+                id="imageLink" 
+                name="listing[image]" 
+                placeholder="https://images.unsplash.com/..." 
+                class="form-control rounded-3"
+              >
+            </div>
+          </div>
+
+          <!-- Price & Country -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6 col-12">
+              <label for="price" class="form-label fw-bold">Price per night (&#8377; INR)</label>
+              <div class="input-group">
+                <span class="input-group-text rounded-start-3">&#8377;</span>
+                <input 
+                  type="number" 
+                  id="price" 
+                  name="listing[price]" 
+                  placeholder="2500" 
+                  min="0" 
+                  class="form-control rounded-end-3" 
+                  required
+                >
+                <div class="invalid-feedback">Please enter a valid price.</div>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-12">
+              <label for="country" class="form-label fw-bold">Country</label>
+              <input 
+                type="text" 
+                id="country" 
+                name="listing[country]" 
+                placeholder="India" 
+                class="form-control rounded-3" 
+                required
+              >
+              <div class="invalid-feedback">Please enter a country.</div>
+            </div>
+          </div>
+
+          <!-- Location (City/State) -->
+          <div class="mb-4">
+            <label for="location" class="form-label fw-bold">Location (City, State)</label>
+            <input 
+              type="text" 
+              id="location" 
+              name="listing[location]" 
+              placeholder="e.g. Candolim, Goa" 
+              class="form-control rounded-3" 
+              required
+            >
+            <div class="invalid-feedback">Please enter a location.</div>
+          </div>
+
+          <!-- Amenities Selection -->
+          <div class="mb-4">
+            <label class="form-label fw-bold mb-2">Amenities Offered</label>
+            <div class="row row-cols-md-3 row-cols-sm-2 row-cols-1 g-2">
+              <% const availableAmenities = [
+                "Wifi", "Air conditioning", "Kitchen", "Free parking", 
+                "Dedicated workspace", "Pool", "TV", "Pet friendly", 
+                "Washing machine", "Balcony", "BBQ grill", "Smoke alarm"
+              ]; %>
+              <% for(let amenity of availableAmenities) { %>
+                <div class="col">
+                  <div class="form-check p-2 border rounded-3 bg-light-subtle">
+                    <input 
+                      class="form-check-input ms-0 me-2" 
+                      type="checkbox" 
+                      name="listing[amenities]" 
+                      value="<%= amenity %>" 
+                      id="amenity_<%= amenity.replace(/\s+/g, '_') %>"
+                    >
+                    <label class="form-check-label small fw-medium" for="amenity_<%= amenity.replace(/\s+/g, '_') %>">
+                      <%= amenity %>
+                    </label>
+                  </div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="/listings" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+            <button type="submit" class="btn btn-danger rounded-pill px-5 fw-bold" style="background-color: #ff385c; border-color: #ff385c;">
+              Create Listing
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

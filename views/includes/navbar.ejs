@@ -1,0 +1,97 @@
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top py-3 main-navbar">
+  <div class="container-fluid px-md-5 px-3">
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center me-4" href="/listings">
+      <i class="fa-regular fa-compass brand-icon me-2"></i>
+      <span class="brand-text">wanderlust</span>
+    </a>
+
+    <!-- Airbnb-Style Center Search Bar -->
+    <div class="navbar-search-wrapper mx-auto d-none d-md-block">
+      <form action="/listings" method="GET" class="search-form d-flex align-items-center">
+        <input 
+          type="text" 
+          name="search" 
+          class="form-control search-input" 
+          placeholder="Search by destination, villa, city..." 
+          value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+          autocomplete="off"
+        >
+        <button class="btn search-btn rounded-circle" type="submit" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Mobile Search Toggle -->
+    <div class="d-md-none flex-grow-1 mx-2">
+      <form action="/listings" method="GET" class="search-form d-flex align-items-center w-100">
+        <input 
+          type="text" 
+          name="search" 
+          class="form-control search-input py-1" 
+          placeholder="Where to?" 
+          value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+        >
+        <button class="btn search-btn rounded-circle" type="submit" aria-label="Search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Right Controls: Host Link & User Menu -->
+    <div class="d-flex align-items-center ms-auto">
+      <a href="/listings/new" class="nav-host-link d-none d-lg-block me-3">
+        Wanderlust your home
+      </a>
+
+      <% if(currUser) { %>
+        <a href="/wishlist" class="wishlist-nav-link me-3 d-none d-sm-block text-dark text-decoration-none" title="Wishlist">
+          <i class="fa-regular fa-heart fs-5"></i>
+        </a>
+      <% } %>
+
+      <!-- User Menu Dropdown -->
+      <div class="dropdown user-dropdown">
+        <button 
+          class="btn user-menu-btn d-flex align-items-center rounded-pill" 
+          type="button" 
+          id="userMenuButton" 
+          data-bs-toggle="dropdown" 
+          aria-expanded="false"
+        >
+          <i class="fa-solid fa-bars me-2 fs-6"></i>
+          <% if(currUser && currUser.avatar && currUser.avatar.url) { %>
+            <img src="<%= currUser.avatar.url %>" alt="<%= currUser.username %>" class="user-avatar-sm rounded-circle">
+          <% } else { %>
+            <div class="user-avatar-placeholder rounded-circle">
+              <i class="fa-solid fa-user"></i>
+            </div>
+          <% } %>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-2 py-2 user-dropdown-menu" aria-labelledby="userMenuButton">
+          <% if(!currUser) { %>
+            <li><a class="dropdown-item fw-semibold" href="/signup">Sign up</a></li>
+            <li><a class="dropdown-item" href="/login">Log in</a></li>
+            <li><hr class="dropdown-divider my-2"></li>
+            <li><a class="dropdown-item" href="/listings/new">Wanderlust your home</a></li>
+            <li><a class="dropdown-item" href="/privacy">Help Center</a></li>
+          <% } else { %>
+            <li class="px-3 py-2 text-muted small">
+              Signed in as <strong class="text-dark"><%= currUser.username %></strong>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li><a class="dropdown-item" href="/bookings"><i class="fa-regular fa-calendar-check me-2 text-muted"></i>My Bookings & Trips</a></li>
+            <li><a class="dropdown-item" href="/wishlist"><i class="fa-regular fa-heart me-2 text-muted"></i>My Wishlist</a></li>
+            <li><a class="dropdown-item" href="/listings/my-listings"><i class="fa-solid fa-house-chimney me-2 text-muted"></i>My Listings</a></li>
+            <li><a class="dropdown-item" href="/listings/new"><i class="fa-solid fa-plus me-2 text-muted"></i>Add New Listing</a></li>
+            <li><a class="dropdown-item" href="/profile"><i class="fa-regular fa-id-badge me-2 text-muted"></i>Account Profile</a></li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li><a class="dropdown-item text-danger" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Log out</a></li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

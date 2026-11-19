@@ -1,0 +1,77 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+  <div class="mb-4">
+    <h2 class="fw-bold text-dark mb-1">My Saved Wishlist</h2>
+    <p class="text-muted">
+      <%= wishlist.length %> <%= wishlist.length === 1 ? 'stay saved' : 'stays saved' %> for your upcoming getaways.
+    </p>
+  </div>
+
+  <% if(wishlist && wishlist.length > 0) { %>
+    <div class="row row-cols-xxl-4 row-cols-xl-3 row-cols-md-2 row-cols-1 g-4">
+      <% for(let listing of wishlist) { %>
+        <div class="col">
+          <div class="card h-100 property-card">
+            <div class="property-img-wrapper position-relative">
+              <a href="/listings/<%= listing._id %>" class="property-link">
+                <img 
+                  src="<%= listing.displayImage %>" 
+                  class="card-img-top property-img" 
+                  alt="<%= listing.title %>"
+                  onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80'"
+                >
+              </a>
+
+              <!-- Wishlist Remove Button -->
+              <button 
+                type="button" 
+                class="wishlist-btn active" 
+                data-listing-id="<%= listing._id %>"
+                title="Remove from wishlist"
+              >
+                <i class="fa-solid fa-heart text-danger"></i>
+              </button>
+            </div>
+
+            <div class="card-body pt-3 pb-2 px-1">
+              <div class="d-flex justify-content-between align-items-start mb-1">
+                <h6 class="card-title fw-bold mb-0 text-truncate me-2 text-dark">
+                  <a href="/listings/<%= listing._id %>" class="text-dark text-decoration-none">
+                    <%= listing.location %>, <%= listing.country %>
+                  </a>
+                </h6>
+                
+                <div class="d-flex align-items-center gap-1 small text-nowrap">
+                  <i class="fa-solid fa-star text-warning"></i>
+                  <span class="fw-semibold"><%= listing.averageRating > 0 ? listing.averageRating : 'New' %></span>
+                </div>
+              </div>
+
+              <p class="text-muted small text-truncate mb-2"><%= listing.title %></p>
+
+              <div class="base-price">
+                <span class="fw-bold fs-6">&#8377;<%= listing.price.toLocaleString("en-IN") %></span>
+                <span class="text-muted small"> / night</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="text-center py-5 my-4 border rounded-4 bg-light-subtle">
+      <div class="mb-3 text-secondary">
+        <i class="fa-regular fa-heart display-3"></i>
+      </div>
+      <h4 class="fw-bold text-dark mb-2">Your wishlist is empty</h4>
+      <p class="text-muted mb-4 max-w-md mx-auto">
+        As you search, tap the heart icon on any stay to save your favorite destinations here.
+      </p>
+      <a href="/listings" class="btn btn-danger rounded-pill px-4 fw-bold" style="background-color: #ff385c; border-color: #ff385c;">
+        Start exploring
+      </a>
+    </div>
+  <% } %>
+</div>
+

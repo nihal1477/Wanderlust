@@ -1,0 +1,199 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-4">
+  <div class="mb-4">
+    <h2 class="fw-bold text-dark mb-1">My Trips & Reservations</h2>
+    <p class="text-muted">Manage your upcoming journeys, view receipts, or check past stays.</p>
+  </div>
+
+  <!-- Nav Tabs -->
+  <ul class="nav nav-pills mb-4 gap-2 border-bottom pb-3" id="bookingTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active rounded-pill px-4 fw-semibold" id="upcoming-tab" data-bs-toggle="pill" data-bs-target="#upcoming" type="button" role="tab">
+        Upcoming (<%= upcoming.length %>)
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-pill px-4 fw-semibold" id="past-tab" data-bs-toggle="pill" data-bs-target="#past" type="button" role="tab">
+        Past Stays (<%= past.length %>)
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link rounded-pill px-4 fw-semibold" id="cancelled-tab" data-bs-toggle="pill" data-bs-target="#cancelled" type="button" role="tab">
+        Cancelled (<%= cancelled.length %>)
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Contents -->
+  <div class="tab-content" id="bookingTabsContent">
+    <!-- Upcoming Stays -->
+    <div class="tab-pane fade show active" id="upcoming" role="tabpanel">
+      <% if(upcoming.length > 0) { %>
+        <div class="row row-cols-lg-2 row-cols-1 g-4">
+          <% for(let booking of upcoming) { %>
+            <div class="col">
+              <div class="card h-100 border rounded-4 shadow-xs overflow-hidden">
+                <div class="row g-0 h-100">
+                  <div class="col-md-5 position-relative">
+                    <img 
+                      src="<%= booking.listing ? booking.listing.displayImage : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80' %>" 
+                      class="img-fluid h-100 w-100 object-fit-cover" 
+                      alt="Property Image"
+                      style="min-height: 200px;"
+                    >
+                    <span class="badge bg-success position-absolute top-0 start-0 m-2 rounded-pill px-3 py-1">
+                      Confirmed
+                    </span>
+                  </div>
+                  <div class="col-md-7 d-flex flex-column p-3">
+                    <h5 class="fw-bold mb-1 text-dark text-truncate">
+                      <%= booking.listing ? booking.listing.title : "Property Stay" %>
+                    </h5>
+                    <p class="text-muted small mb-2 text-truncate">
+                      <i class="fa-solid fa-location-dot me-1"></i>
+                      <%= booking.listing ? (booking.listing.location + ', ' + booking.listing.country) : "Location" %>
+                    </p>
+
+                    <div class="bg-light p-2 rounded-3 mb-3 small">
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Dates:</span>
+                        <strong class="text-dark">
+                          <%= new Date(booking.checkIn).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %> - 
+                          <%= new Date(booking.checkOut).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                        </strong>
+                      </div>
+                      <div class="d-flex justify-content-between mb-1">
+                        <span class="text-muted">Stay / Guests:</span>
+                        <span><%= booking.nights %> <%= booking.nights === 1 ? 'night' : 'nights' %> &middot; <%= booking.guests %> <%= booking.guests === 1 ? 'guest' : 'guests' %></span>
+                      </div>
+                      <div class="d-flex justify-content-between">
+                        <span class="text-muted">Total Paid:</span>
+                        <strong class="text-dark">&#8377;<%= booking.totalPrice.toLocaleString("en-IN") %></strong>
+                      </div>
+                    </div>
+
+                    <div class="mt-auto d-flex gap-2">
+                      <a href="/bookings/<%= booking._id %>" class="btn btn-dark btn-sm rounded-pill flex-grow-1">
+                        View Receipt
+                      </a>
+                      <form method="POST" action="/bookings/<%= booking._id %>/cancel" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill">
+                          Cancel
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <div class="text-center py-5 my-4 border rounded-4 bg-light-subtle">
+          <div class="mb-3 text-secondary">
+            <i class="fa-regular fa-calendar-xmark display-3"></i>
+          </div>
+          <h4 class="fw-bold text-dark mb-2">No upcoming trips booked</h4>
+          <p class="text-muted mb-4 max-w-md mx-auto">
+            Time to dust off your bags and start planning your next great adventure.
+          </p>
+          <a href="/listings" class="btn btn-danger rounded-pill px-4 fw-bold" style="background-color: #ff385c; border-color: #ff385c;">
+            Explore homes
+          </a>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Past Stays -->
+    <div class="tab-pane fade" id="past" role="tabpanel">
+      <% if(past.length > 0) { %>
+        <div class="row row-cols-lg-2 row-cols-1 g-4">
+          <% for(let booking of past) { %>
+            <div class="col">
+              <div class="card h-100 border rounded-4 shadow-xs overflow-hidden opacity-85">
+                <div class="row g-0 h-100">
+                  <div class="col-md-5">
+                    <img 
+                      src="<%= booking.listing ? booking.listing.displayImage : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80' %>" 
+                      class="img-fluid h-100 w-100 object-fit-cover" 
+                      alt="Property Image"
+                      style="min-height: 180px;"
+                    >
+                  </div>
+                  <div class="col-md-7 d-flex flex-column p-3">
+                    <span class="badge bg-secondary rounded-pill px-2 py-1 mb-2 align-self-start">Completed Stay</span>
+                    <h5 class="fw-bold mb-1 text-dark text-truncate">
+                      <%= booking.listing ? booking.listing.title : "Completed Trip" %>
+                    </h5>
+                    <p class="text-muted small mb-2">
+                      <%= new Date(booking.checkIn).toLocaleDateString() %> - <%= new Date(booking.checkOut).toLocaleDateString() %>
+                    </p>
+                    <div class="mt-auto d-flex gap-2">
+                      <a href="/bookings/<%= booking._id %>" class="btn btn-outline-dark btn-sm rounded-pill flex-grow-1">
+                        View Receipt
+                      </a>
+                      <% if(booking.listing) { %>
+                        <a href="/listings/<%= booking.listing._id %>#reviews" class="btn btn-outline-secondary btn-sm rounded-pill">
+                          Write Review
+                        </a>
+                      <% } %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <p class="text-muted text-center py-4">No past stays completed yet.</p>
+      <% } %>
+    </div>
+
+    <!-- Cancelled Stays -->
+    <div class="tab-pane fade" id="cancelled" role="tabpanel">
+      <% if(cancelled.length > 0) { %>
+        <div class="row row-cols-lg-2 row-cols-1 g-4">
+          <% for(let booking of cancelled) { %>
+            <div class="col">
+              <div class="card h-100 border rounded-4 shadow-xs overflow-hidden">
+                <div class="row g-0 h-100">
+                  <div class="col-md-5 position-relative">
+                    <img 
+                      src="<%= booking.listing ? booking.listing.displayImage : 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80' %>" 
+                      class="img-fluid h-100 w-100 object-fit-cover grayscale" 
+                      alt="Property Image"
+                      style="min-height: 180px; filter: grayscale(80%);"
+                    >
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-2 rounded-pill px-3 py-1">
+                      Cancelled
+                    </span>
+                  </div>
+                  <div class="col-md-7 d-flex flex-column p-3">
+                    <h5 class="fw-bold mb-1 text-dark text-truncate">
+                      <%= booking.listing ? booking.listing.title : "Cancelled Stay" %>
+                    </h5>
+                    <p class="text-muted small mb-2">
+                      <%= new Date(booking.checkIn).toLocaleDateString() %> - <%= new Date(booking.checkOut).toLocaleDateString() %>
+                    </p>
+                    <p class="text-danger small mb-3">
+                      Status: <%= booking.paymentStatus === 'refunded' ? 'Refunded' : 'Cancelled' %>
+                    </p>
+                    <div class="mt-auto">
+                      <a href="/bookings/<%= booking._id %>" class="btn btn-outline-secondary btn-sm rounded-pill w-100">
+                        View Details
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } else { %>
+        <p class="text-muted text-center py-4">No cancelled reservations.</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+

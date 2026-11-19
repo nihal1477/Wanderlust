@@ -1,0 +1,69 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-8 col-12">
+      <div class="card p-4 p-md-5 rounded-4 border shadow-sm bg-white">
+        <!-- Card Header -->
+        <div class="text-center mb-4">
+          <i class="fa-regular fa-compass fs-1 text-danger mb-2"></i>
+          <h3 class="fw-bold text-dark">Welcome Back</h3>
+          <p class="text-muted small">Log in to manage your bookings and listings.</p>
+        </div>
+
+        <form action="/login" method="POST" novalidate class="needs-validation">
+          <!-- Username -->
+          <div class="mb-3">
+            <label for="username" class="form-label small fw-bold text-muted">Username</label>
+            <input 
+              type="text" 
+              name="username" 
+              id="username" 
+              class="form-control rounded-3 py-2" 
+              placeholder="Your username" 
+              required
+            >
+            <div class="invalid-feedback">Please enter your username.</div>
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label for="password" class="form-label small fw-bold text-muted">Password</label>
+            <input 
+              type="password" 
+              name="password" 
+              id="password" 
+              class="form-control rounded-3 py-2" 
+              placeholder="Your password" 
+              required
+            >
+            <div class="invalid-feedback">Please enter your password.</div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-danger w-100 py-2 rounded-3 fw-bold mb-3" style="background-color: #ff385c; border-color: #ff385c;">
+            Log in
+          </button>
+
+          <!-- Quick Demo Credentials Box for Testing -->
+          <div class="p-3 bg-light rounded-3 mb-3 small border">
+            <div class="fw-bold text-dark mb-1"><i class="fa-solid fa-key text-warning me-1"></i> Demo Credentials:</div>
+            <div class="d-flex justify-content-between mb-1">
+              <span>Superhost:</span>
+              <code class="text-dark">demohost / password123</code>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Traveler:</span>
+              <code class="text-dark">traveler / password123</code>
+            </div>
+          </div>
+
+          <div class="text-center text-muted small pt-3 border-top">
+            Don't have an account? <a href="/signup" class="text-dark fw-bold text-decoration-none">Sign up</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
